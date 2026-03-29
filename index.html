@@ -401,13 +401,32 @@ footer{border-top:1px solid var(--brd);padding:36px 0}
 </div>
 
 <script>
-// ═══ FLYING LOGO ═══
+// ═══ FLYING LOGO (lerp-smoothed) ═══
 var fLogo=document.getElementById('fLogo'),hGhost=document.getElementById('hGhost'),navAnchor=document.getElementById('navAnchor'),navEl=document.getElementById('nav');
 var heroOrigin={x:0,y:0,size:0},navDest={x:0,y:0},NAV_SIZE=18,measured=false;
-function measure(){var hr=hGhost.getBoundingClientRect(),scrollY=window.scrollY;heroOrigin.x=hr.left;heroOrigin.y=hr.top+scrollY;heroOrigin.size=parseFloat(getComputedStyle(hGhost).fontSize);var nr=navAnchor.getBoundingClientRect();navDest.x=nr.left+nr.width/2;navDest.y=28;fLogo.style.fontSize=heroOrigin.size+'px';fLogo.style.letterSpacing='-2px';measured=true}
+var currentX=0,currentY=0,currentScale=1,smoothX=0,smoothY=0,smoothScale=1;
+var LERP=0.12;
+function measure(){var hr=hGhost.getBoundingClientRect(),scrollY=window.scrollY;heroOrigin.x=hr.left;heroOrigin.y=hr.top+scrollY;heroOrigin.size=parseFloat(getComputedStyle(hGhost).fontSize);var nr=navAnchor.getBoundingClientRect();navDest.x=nr.left+nr.width/2;navDest.y=28;fLogo.style.fontSize=heroOrigin.size+'px';fLogo.style.letterSpacing='-2px';measured=true;smoothX=currentX=heroOrigin.x;smoothY=currentY=heroOrigin.y-scrollY;smoothScale=currentScale=1}
 function easeOutCubic(t){return 1-Math.pow(1-t,3)}
-function updateLogo(){if(!measured)return;var scrollY=window.scrollY,start=150,end=320;var rawT=Math.max(0,Math.min(1,(scrollY-start)/(end-start))),t=easeOutCubic(rawT);var heroScreenY=heroOrigin.y-scrollY,scaleRatio=NAV_SIZE/heroOrigin.size,currentScale=1+(scaleRatio-1)*t;var scaledWidth=heroOrigin.size*currentScale*4.5,scaledHeight=heroOrigin.size*currentScale;var targetX=navDest.x-scaledWidth/2,targetY=navDest.y-scaledHeight/2;var currentX=heroOrigin.x+(targetX-heroOrigin.x)*t,currentY=heroScreenY+(targetY-heroScreenY)*t;fLogo.style.transform='translate('+currentX+'px,'+currentY+'px) scale('+currentScale+')';if(rawT>0.1){navEl.classList.add('scrolled')}else{navEl.classList.remove('scrolled')}}
-var lastScroll=-1;function loop(){if(window.scrollY!==lastScroll){lastScroll=window.scrollY;updateLogo()}requestAnimationFrame(loop)}
+function updateLogo(){
+  if(!measured)return;
+  var scrollY=window.scrollY,start=150,end=320;
+  var rawT=Math.max(0,Math.min(1,(scrollY-start)/(end-start))),t=easeOutCubic(rawT);
+  var heroScreenY=heroOrigin.y-scrollY;
+  var scaleRatio=NAV_SIZE/heroOrigin.size;
+  var targetScale=1+(scaleRatio-1)*t;
+  var scaledWidth=heroOrigin.size*targetScale*4.5;
+  var scaledHeight=heroOrigin.size*targetScale;
+  var targetX=heroOrigin.x+(navDest.x-scaledWidth/2-heroOrigin.x)*t;
+  var targetY=heroScreenY+(navDest.y-scaledHeight/2-heroScreenY)*t;
+  // Lerp towards target
+  smoothX+=(targetX-smoothX)*LERP;
+  smoothY+=(targetY-smoothY)*LERP;
+  smoothScale+=(targetScale-smoothScale)*LERP;
+  fLogo.style.transform='translate('+smoothX+'px,'+smoothY+'px) scale('+smoothScale+')';
+  if(rawT>0.1){navEl.classList.add('scrolled')}else{navEl.classList.remove('scrolled')}
+}
+function loop(){updateLogo();requestAnimationFrame(loop)}
 function init(){measure();updateLogo();loop()}
 window.addEventListener('resize',function(){measure();updateLogo()});document.fonts.ready.then(function(){setTimeout(init,30)});if(document.readyState==='complete')init();else window.addEventListener('load',init);
 
