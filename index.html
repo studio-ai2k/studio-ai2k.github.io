@@ -365,6 +365,7 @@ document.querySelectorAll('[data-spotlight]').forEach(function(el){
 // ═══ REVEALS ═══
 document.getElementById('nT').addEventListener('click',function(){document.getElementById('nLM').classList.toggle('op')});
 document.querySelectorAll('.nl-mobile a,.nav-left a,.nav-right a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('nLM').classList.remove('op')})});
+window.addEventListener('resize',function(){if(window.innerWidth>960)document.getElementById('nLM').classList.remove('op')});
 var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vi');e.target.classList.add('vis')}})},{threshold:.12});
 document.querySelectorAll('.rv,.rv-stagger,.proc-flow').forEach(function(el){obs.observe(el)});
 document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
