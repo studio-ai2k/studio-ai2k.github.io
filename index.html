@@ -78,23 +78,37 @@ nav.scrolled .nav-left,nav.scrolled .nav-right{opacity:1;pointer-events:auto}
 .sb p{font-size:15px;color:var(--t2);line-height:1.75;margin-bottom:20px}
 .sdt{font-family:var(--mono);font-size:11px;color:var(--t3);line-height:2.2}.sdt span{color:var(--t2)}
 
-/* ═══ PROCESS — sequential pulse + animated line ═══ */
+/* ═══ PROCESS — 6-phase pipeline ═══ */
 #process{overflow:hidden;border-top:1px solid var(--brd)}
-.proc-flow{margin-top:64px;position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
-.proc-flow::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:1px;background:var(--brd)}
-.proc-flow::after{content:'';position:absolute;top:20px;left:10%;right:10%;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform 1.5s cubic-bezier(.16,1,.3,1)}
-.proc-flow.vis::after{transform:scaleX(1)}
-.pf-step{text-align:center;position:relative;z-index:2}
-.pf-dot{width:40px;height:40px;border-radius:50%;border:2px solid var(--brd);background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--t3);transition:all .4s}
-.pf-step:hover .pf-dot{border-color:var(--acc);color:var(--acc);box-shadow:0 0 20px var(--adim),0 0 40px var(--aglow)}
-/* Sequential pulse when visible */
-.proc-flow.vis .pf-step:nth-child(1) .pf-dot{animation:dotPulse .6s ease .3s forwards}
-.proc-flow.vis .pf-step:nth-child(2) .pf-dot{animation:dotPulse .6s ease .6s forwards}
-.proc-flow.vis .pf-step:nth-child(3) .pf-dot{animation:dotPulse .6s ease .9s forwards}
-.proc-flow.vis .pf-step:nth-child(4) .pf-dot{animation:dotPulse .6s ease 1.2s forwards}
+.pipeline{margin-top:64px;position:relative}
+.pipe-line{position:absolute;top:24px;left:4%;right:4%;height:1px;background:var(--brd)}
+.pipe-line-fill{position:absolute;top:24px;left:4%;right:4%;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform 2s cubic-bezier(.16,1,.3,1)}
+.pipeline.vis .pipe-line-fill{transform:scaleX(1)}
+.pipe-steps{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;position:relative;z-index:2}
+.pipe-step{text-align:center}
+.pipe-dot{width:48px;height:48px;border-radius:50%;border:2px solid var(--brd);background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--t3);transition:all .4s;position:relative}
+.pipe-step:hover .pipe-dot{border-color:var(--acc);color:var(--acc);box-shadow:0 0 20px var(--adim),0 0 40px var(--aglow)}
+.pipeline.vis .pipe-step:nth-child(1) .pipe-dot{animation:dotPulse .6s ease .2s forwards}
+.pipeline.vis .pipe-step:nth-child(2) .pipe-dot{animation:dotPulse .6s ease .5s forwards}
+.pipeline.vis .pipe-step:nth-child(3) .pipe-dot{animation:dotPulse .6s ease .8s forwards}
+.pipeline.vis .pipe-step:nth-child(4) .pipe-dot{animation:dotPulse .6s ease 1.1s forwards}
+.pipeline.vis .pipe-step:nth-child(5) .pipe-dot{animation:dotPulse .6s ease 1.4s forwards}
+.pipeline.vis .pipe-step:nth-child(6) .pipe-dot{animation:dotPulse .6s ease 1.7s forwards}
 @keyframes dotPulse{0%{border-color:var(--brd);color:var(--t3);box-shadow:none}50%{border-color:var(--acc);color:var(--acc);box-shadow:0 0 24px var(--adim)}100%{border-color:var(--brdh);color:var(--t2);box-shadow:none}}
-.pf-step h3{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
-.pf-step p{font-size:14px;color:var(--t2);line-height:1.65;max-width:220px;margin:0 auto}
+.pipe-step h3{font-size:14px;font-weight:700;margin-bottom:6px;letter-spacing:-.2px}
+.pipe-step p{font-size:12px;color:var(--t2);line-height:1.55;max-width:160px;margin:0 auto}
+
+/* ═══ STACK TICKER ═══ */
+.stack-ticker{border-top:1px solid var(--brd);padding:32px 0;overflow:hidden;position:relative}
+.stack-ticker::before,.stack-ticker::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.stack-ticker::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.stack-ticker::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.ticker-track{display:flex;gap:48px;animation:tickerScroll 30s linear infinite;width:max-content}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{font-family:var(--mono);font-size:12px;color:var(--t3);letter-spacing:.5px;white-space:nowrap;transition:color .3s;cursor:default}
+.ticker-item:hover{color:var(--acc)}
+.ticker-sep{color:var(--brd);font-size:10px}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ═══ PORTFOLIO — rotating gradient border ═══ */
 #portfolio{border-top:1px solid var(--brd)}
@@ -161,17 +175,21 @@ footer{border-top:1px solid var(--brd);padding:36px 0}
 .rv-stagger.vi>*:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.15s}
 .rv-stagger.vi>*:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.25s}
 .rv-stagger.vi>*:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.35s}
+.rv-stagger.vi>*:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.45s}
+.rv-stagger.vi>*:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.55s}
+.rv-stagger.vi>*:nth-child(7){opacity:1;transform:translateY(0);transition-delay:.65s}
+.rv-stagger.vi>*:nth-child(8){opacity:1;transform:translateY(0);transition-delay:.75s}
 
 @media(max-width:960px){
   .sg{grid-template-columns:1fr}.sdv{display:none}
-  .proc-flow{grid-template-columns:repeat(2,1fr);gap:24px}.proc-flow::before,.proc-flow::after{display:none}
+  .pipe-steps{grid-template-columns:repeat(3,1fr);gap:20px}.pipe-line,.pipe-line-fill{display:none}
   .port-inner{grid-template-columns:1fr;gap:16px}.port-right{text-align:left}
   .about-grid{grid-template-columns:1fr}
   .cg{flex-direction:column;align-items:flex-start}
   .nav-left,.nav-right{display:none}.nt{display:block}
 }
 @media(max-width:680px){
-  .proc-flow{grid-template-columns:1fr}
+  .pipe-steps{grid-template-columns:repeat(2,1fr)}
   .pct{padding:28px 22px}
   .hero-ghost{font-size:clamp(34px,10vw,48px)}
 }
@@ -235,13 +253,19 @@ footer{border-top:1px solid var(--brd);padding:36px 0}
 <section id="process"><div class="C">
   <div class="rv">
     <p class="slb">Process</p>
-    <h2 class="st">How a product <em>happens.</em></h2>
+    <h2 class="st">The <em>pipeline.</em></h2>
   </div>
-  <div class="proc-flow rv-stagger" id="procFlow">
-    <div class="pf-step"><div class="pf-dot">01</div><h3>Discover</h3><p>Understand the business, the users, and the problem. Define what needs to exist.</p></div>
-    <div class="pf-step"><div class="pf-dot">02</div><h3>Design</h3><p>Build a product shell — real navigation, modules, data. The pitch asset.</p></div>
-    <div class="pf-step"><div class="pf-dot">03</div><h3>Build</h3><p>AI-assisted full-stack development. Ship modules as they're ready.</p></div>
-    <div class="pf-step"><div class="pf-dot">04</div><h3>Ship</h3><p>Product delivered. Users onboarded. Iterate, maintain, or hand off.</p></div>
+  <div class="pipeline rv-stagger" id="procFlow">
+    <div class="pipe-line"></div>
+    <div class="pipe-line-fill"></div>
+    <div class="pipe-steps">
+      <div class="pipe-step"><div class="pipe-dot">01</div><h3>Vision</h3><p>Understand the business. Define the product. Lock the stack.</p></div>
+      <div class="pipe-step"><div class="pipe-dot">02</div><h3>Shell</h3><p>Build the outer structure — navigation, modules, visual identity.</p></div>
+      <div class="pipe-step"><div class="pipe-dot">03</div><h3>Spec</h3><p>Write detailed briefs for every module. Remove every ambiguity.</p></div>
+      <div class="pipe-step"><div class="pipe-dot">04</div><h3>Prototype</h3><p>Full interactive prototype. Click through every screen. Iterate.</p></div>
+      <div class="pipe-step"><div class="pipe-dot">05</div><h3>Build</h3><p>AI-assisted production code. Module by module. Continuous delivery.</p></div>
+      <div class="pipe-step"><div class="pipe-dot">06</div><h3>Ship</h3><p>Deploy, onboard users, hand off documentation. Product live.</p></div>
+    </div>
   </div>
 </div></section>
 
@@ -316,6 +340,51 @@ footer{border-top:1px solid var(--brd);padding:36px 0}
   </div>
 </div></section>
 
+<div class="stack-ticker">
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item">React</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Next.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Tailwind CSS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">shadcn/ui</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Node.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">FastAPI</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">PostgreSQL</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Supabase</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Framer Motion</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">D3.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Three.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Recharts</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Vercel</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Hetzner VPS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Nginx</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Redis</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Stripe</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Resend</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Lucide</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Zustand</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">React</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Next.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Tailwind CSS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">shadcn/ui</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Node.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">FastAPI</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">PostgreSQL</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Supabase</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Framer Motion</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">D3.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Three.js</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Recharts</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Vercel</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Hetzner VPS</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Nginx</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Redis</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Stripe</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Resend</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Lucide</span><span class="ticker-sep">·</span>
+    <span class="ticker-item">Zustand</span><span class="ticker-sep">·</span>
+  </div>
+</div>
+
 
 
 <section id="contact"><div class="C">
@@ -367,7 +436,7 @@ document.getElementById('nT').addEventListener('click',function(){document.getEl
 document.querySelectorAll('.nl-mobile a,.nav-left a,.nav-right a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('nLM').classList.remove('op')})});
 window.addEventListener('resize',function(){if(window.innerWidth>960)document.getElementById('nLM').classList.remove('op')});
 var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vi');e.target.classList.add('vis')}})},{threshold:.12});
-document.querySelectorAll('.rv,.rv-stagger,.proc-flow').forEach(function(el){obs.observe(el)});
+document.querySelectorAll('.rv,.rv-stagger,.pipeline').forEach(function(el){obs.observe(el)});
 document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
 </script>
 </body>
