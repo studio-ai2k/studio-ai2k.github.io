@@ -8,6 +8,15 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>studio AI2K — Product Builder</title>
 <meta name="description" content="AI-native product studio. Websites, tools, platforms, and vertical SaaS — built from scratch.">
+<meta property="og:title" content="studio AI2K — Product Builder">
+<meta property="og:description" content="AI-native product studio. Websites, tools, platforms, and vertical SaaS — built from scratch.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://studio-ai2k.github.io">
+<meta property="og:image" content="https://studio-ai2k.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="studio AI2K — Product Builder">
+<meta name="twitter:description" content="AI-native product studio. Websites, tools, platforms, and vertical SaaS — built from scratch.">
+<meta name="twitter:image" content="https://studio-ai2k.github.io/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -22,8 +31,8 @@ canvas#P{position:fixed;inset:0;width:100%;height:130%;pointer-events:none;z-ind
 .W{position:relative;z-index:1}
 .C{max-width:1140px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
 section{padding:clamp(80px,12vh,140px) 0;position:relative}
-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(0,255,170,.3),var(--brd) 40%,var(--brd));transform:scaleX(0);transform-origin:left;transition:transform 1.5s cubic-bezier(.16,1,.3,1) .3s}
-section:nth-of-type(even)::before{transform-origin:right;background:linear-gradient(270deg,rgba(0,255,170,.3),var(--brd) 40%,var(--brd))}
+section:not(.hero)::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(0,255,170,.3),var(--brd) 40%,var(--brd));transform:scaleX(0);transform-origin:left;transition:transform 1.5s cubic-bezier(.16,1,.3,1) .3s}
+section:not(.hero):nth-of-type(even)::before{transform-origin:right;background:linear-gradient(270deg,rgba(0,255,170,.3),var(--brd) 40%,var(--brd))}
 section.vi::before{transform:scaleX(1)}
 nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;display:flex;align-items:center;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);background:rgba(5,6,8,.35);border-bottom:1px solid var(--brd);transition:background .3s,border-color .3s}
 nav.scrolled{background:rgba(5,6,8,.5)}
@@ -36,8 +45,6 @@ nav.scrolled .nav-left,nav.scrolled .nav-right{opacity:1;pointer-events:auto}
 .nav-left a:hover,.nav-right a:hover{color:var(--acc)}
 .nav-left a:hover::after,.nav-right a:hover::after{width:100%}
 .nav-anchor{width:1px;height:1px}
-.nt{display:none;background:none;border:none;padding:8px 12px;cursor:pointer;position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:10}
-.nt i{display:block;width:18px;height:1.5px;background:var(--acc);margin:4px 0}
 .nav-pill{display:none;position:fixed;bottom:28px;right:20px;z-index:601;background:none;border:none;padding:12px;cursor:pointer}
 .nav-pill i{display:block;width:20px;height:1.5px;background:var(--acc);margin:4px 0;transition:all .3s}
 .nav-pill.active i:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
@@ -188,7 +195,7 @@ footer{border-top:1px solid var(--brd);padding:36px 0}
   .port-inner{grid-template-columns:1fr;gap:16px}.port-right{text-align:left}.port-left{min-width:auto}.port-name{font-size:20px}
   .about-grid{grid-template-columns:1fr}
   .cg{flex-direction:column;align-items:flex-start}
-  .nav-left,.nav-right{display:none}.nt{display:none}.nav-pill{display:block}
+  .nav-left,.nav-right{display:none}.nav-pill{display:block}
   .st{font-size:clamp(26px,6vw,40px)}
   .sg,.pipeline,.port-grid,.about-grid{margin-top:40px}
 }
@@ -226,7 +233,6 @@ footer{border-top:1px solid var(--brd);padding:36px 0}
     <div class="nav-anchor" id="navAnchor"></div>
     <ul class="nav-right"><li><a href="#partners">Partners</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
   </div>
-  <button class="nt" id="nT" aria-label="Menu"><i></i><i></i><i></i></button>
 </nav>
 <button class="nav-pill" id="navPill"><i></i><i></i><i></i></button>
 <ul class="nl-mobile" id="nLM"><li><a href="#services" data-text="Services">Services</a></li><li><a href="#process" data-text="Process">Process</a></li><li><a href="#portfolio" data-text="Work">Work</a></li><li><a href="#partners" data-text="Partners">Partners</a></li><li><a href="#about" data-text="About">About</a></li><li><a href="#contact" data-text="Contact">Contact</a></li></ul>
@@ -333,7 +339,7 @@ var hero={x:0,y:0,size:0,ls:-2},nav={x:0,y:0,size:18,ls:-0.5},ready=false,SCROLL
 function measure(){var s=window.scrollY,hr=hGhost.getBoundingClientRect();hero.x=hr.left;hero.y=hr.top+s;hero.size=parseFloat(getComputedStyle(hGhost).fontSize);fLogo.style.fontSize=hero.size+'px';fLogo.style.letterSpacing=hero.ls+'px';var heroW=fLogo.offsetWidth;var scaleRatio=nav.size/hero.size;var navW=heroW*scaleRatio;var nr=navAnchor.getBoundingClientRect();nav.x=nr.left+nr.width/2-navW/2;nav.y=Math.round((64-nav.size)/2);ready=true}
 function ease(t){return t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1}
 var tickerEl=document.querySelector('.stack-ticker');
-function render(){if(!ready){requestAnimationFrame(render);return}var s=window.scrollY,raw=Math.max(0,Math.min(1,(s-SCROLL_START)/(SCROLL_END-SCROLL_START))),t=ease(raw),r=nav.size/hero.size,sc=1+(r-1)*t,hy=hero.y-s,x=hero.x+(nav.x-hero.x)*t,y=hy+(nav.y-hy)*t,ls=hero.ls+(nav.ls-hero.ls)*t;if(raw>=1){x=nav.x;y=nav.y;sc=r;ls=nav.ls}if(raw<=0){x=hero.x;y=hy;sc=1;ls=hero.ls}fLogo.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+sc.toFixed(5)+')';fLogo.style.letterSpacing=ls.toFixed(2)+'px';c.style.transform='translateY('+(s*-0.3).toFixed(1)+'px)';if(tickerEl){var tr=tickerEl.getBoundingClientRect();if(tr.top<innerHeight&&tr.bottom>0){var mid=(tr.top+tr.bottom)/2-innerHeight/2;tickerEl.style.transform='translateY('+(mid*-0.15).toFixed(1)+'px)'}}if(raw>.05)navEl.classList.add('scrolled');else navEl.classList.remove('scrolled');requestAnimationFrame(render)}
+function render(){if(!ready){requestAnimationFrame(render);return}var s=window.scrollY,raw=Math.max(0,Math.min(1,(s-SCROLL_START)/(SCROLL_END-SCROLL_START))),t=ease(raw),r=nav.size/hero.size,sc=1+(r-1)*t,hy=hero.y-s,x=hero.x+(nav.x-hero.x)*t,y=hy+(nav.y-hy)*t,ls=hero.ls+(nav.ls-hero.ls)*t;if(raw>=1){x=nav.x;y=nav.y;sc=r;ls=nav.ls}if(raw<=0){x=hero.x;y=hy;sc=1;ls=hero.ls}fLogo.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+sc.toFixed(5)+')';fLogo.style.letterSpacing=ls.toFixed(2)+'px';c.style.transform='translateY('+(s*-0.3).toFixed(1)+'px)';if(tickerEl){var tr=tickerEl.getBoundingClientRect();if(tr.top<innerHeight&&tr.bottom>0){var mid=(tr.top+tr.bottom)/2-innerHeight/2;tickerEl.style.marginTop=(mid*-0.15).toFixed(1)+'px'}}if(raw>.05)navEl.classList.add('scrolled');else navEl.classList.remove('scrolled');requestAnimationFrame(render)}
 function init(){measure();render()}
 window.addEventListener('resize',measure);
 var lastVH=window.innerHeight;setInterval(function(){if(window.innerHeight!==lastVH){lastVH=window.innerHeight;measure()}},300);
@@ -361,7 +367,7 @@ function scramble(el,final,dur){var len=final.length,t0=performance.now();functi
 function openNav(){navMenu.classList.add('op');navMenu.classList.remove('frosted');navPill.classList.add('active');var links=navMenu.querySelectorAll('a'),total=links.length*60+400;links.forEach(function(a,i){setTimeout(function(){scramble(a,a.getAttribute('data-text'),400)},i*60)});setTimeout(function(){navMenu.classList.add('frosted')},total)}
 function closeNav(){navMenu.classList.remove('op','frosted');navPill.classList.remove('active')}
 function toggleNav(){navMenu.classList.contains('op')?closeNav():openNav()}
-document.getElementById('nT').addEventListener('click',toggleNav);
+
 navPill.addEventListener('click',toggleNav);
 document.querySelectorAll('.nl-mobile a,.nav-left a,.nav-right a').forEach(function(a){a.addEventListener('click',closeNav)});
 window.addEventListener('resize',function(){if(innerWidth>960)closeNav()});
